@@ -18,6 +18,11 @@ def create_app():
     app.register_blueprint(home_routes.bp)
     from .routes import produto_routes
     app.register_blueprint(produto_routes.bp)
+    from .routes import login_routes
+    app.register_blueprint(login_routes.bp)
+    from .routes import register_routes
+    app.register_blueprint(register_routes.bp)
+
 
 
     return app

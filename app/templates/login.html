@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Login - Marketplace</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/material-design-iconic-font/css/material-design-iconic-font.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-11 mt-60 mx-md-auto">
+        <div class="login-box bg-white pl-lg-5 pl-0">
+          <div class="row no-gutters align-items-center">
+            <div class="col-md-6">
+              <div class="form-wrap bg-white">
+                <h4 class="btm-sep pb-3 mb-5">Login</h4>
+                <form class="form" method="post" action="{{ url_for('login.process_login') }}">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group position-relative">
+                        <span class="zmdi zmdi-account"></span>
+                        <input type="email" name="email" class="form-control" placeholder="Email" required>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="form-group position-relative">
+                        <span class="zmdi zmdi-lock"></span>
+                        <input type="password" name="password" class="form-control" placeholder="Senha" required>
+                      </div>
+                    </div>
+                    <div class="col-12 text-lg-right">
+                      <a href="#" class="c-black">Esqueceu a senha?</a>
+                    </div>
+                    <div class="col-12 mt-30">
+                      <button type="submit" class="btn btn-lg btn-custom btn-dark btn-block">Entrar</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="content text-center">
+                <div class="border-bottom pb-5 mb-5">
+                  <h3 class="c-black">Primeira vez aqui?</h3>
+                  <a href="{{ url_for('register.process_register') }}" class="btn btn-custom">Inscreva-se!</a>
+                </div>
+                <h5 class="c-black mb-4 mt-n1">Ou entre como:</h5>
+                <div class="socials">
+                  <a href="#" class="zmdi zmdi-facebook"></a>
+                  <a href="#" class="zmdi zmdi-twitter"></a>
+                  <a href="#" class="zmdi zmdi-google"></a>
+                  <a href="#" class="zmdi zmdi-instagram"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
