@@ -1,20 +1,21 @@
-# Comando para rodar a aplicação local com testes (quando tiver)
+# Iniciar app local
 up:
 	@echo "🚀 Iniciando a aplicação local com Flask..."
 	python3 run.py
 
-# Gera a imagem Docker e sobe o container junto com o Nginx
+# Gerar imagem e subir com Docker + Nginx
 deploy:
 	@echo "🐳 Gerando imagem Docker e subindo com Nginx..."
 	docker compose -f docker-compose.yml up --build -d
 
-# Dropar e recriar o banco de dados
+# Dropar e recriar banco
 reboot_db:
 	@echo "🗑️ Dropar banco de dados..."
-	python3 db.py dropar
+	python3 db_manage.py dropar
 	@echo "✅ Recriando banco de dados..."
-	python3 db.py criar
-# Ver logs do container da aplicação Flask
+	python3 db_manage.py criar
+
+# Ver logs da app Flask
 logs:
 	@echo "📋 Exibindo logs do container Flask..."
 	docker compose logs -f web

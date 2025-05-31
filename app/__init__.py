@@ -1,28 +1,32 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-
-import os
-
-db = SQLAlchemy()
+from app.config import Config
+from app.db import db
+from flask_login import LoginManager
+from app.models.usuario import User
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('config.Config')
+    app.config.from_object(Config)
+
+    app.config['SECRET_KEY'] = 'ch4v3_h1p3r_s3cr3t4'
+
     db.init_app(app)
-    with app.app_context():
-        db.create_all()  # aqui cria as tabelas
 
-    from .routes import usuario_routes
-    app.register_blueprint(usuario_routes.bp)
-    from .routes import home_routes
-    app.register_blueprint(home_routes.bp)
-    from .routes import produto_routes
-    app.register_blueprint(produto_routes.bp)
-    from .routes import login_routes
-    app.register_blueprint(login_routes.bp)
-    from .routes import register_routes
-    app.register_blueprint(register_routes.bp)
+    login_manager = LoginManager()
+    login_manager.login_view = 'login.login'
+    login_manager.init_app(app)
 
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    # Registro dos blueprints
+    from app.routes.login_routes import login_bp
+    from app.routes.register_routes import register_bp
+    from app.routes.home_routes import home_bp
+    app.register_blueprint(login_bp)
+    app.register_blueprint(register_bp)
+    app.register_blueprint(home_bp)
 
 
     return app
