@@ -24,6 +24,8 @@ def create_app():
     from app.routes.login_routes import login_bp
     from app.routes.register_routes import register_bp
     from app.routes.home_routes import home_bp
+    from app.routes.carrinho_routes import carrinho_bp
+    app.register_blueprint(carrinho_bp)
     app.register_blueprint(login_bp)
     app.register_blueprint(register_bp)
     app.register_blueprint(home_bp)

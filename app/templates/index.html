@@ -26,13 +26,10 @@
         <li class="nav-item"><a class="nav-link" href="/produtos">Produtos</a></li>
         {% if current_user.is_authenticated %}
           <li class="nav-item"><a class="nav-link" href="#">Carrinho</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('login.logout') }}">Logout</a></li>
+        {% else %}
+          <li class="nav-item"><a class="nav-link" href="/register">Login</a></li>
         {% endif %}
-        {% if current_user.is_authenticated %}
-        <li class="nav-item"><a class="nav-link" href="{{ url_for('login.logout') }}">Logout</a></li>
-      {% endif %}
-
-
-        <li class="nav-item"><a class="nav-link" href="/register">Login</a></li>
       </ul>
     </div>
   </div>
@@ -50,7 +47,7 @@
       <li class="nav-item"><a class="nav-link" href="/produtos">🛍 Produtos</a></li>
       {% if current_user.is_authenticated %}
         <li class="nav-item"><a class="nav-link" href="#">🛒 Carrinho</a></li>
-        {% endif %}
+      {% endif %}
       <li class="nav-item"><a class="nav-link" href="#">👤 Login</a></li>
     </ul>
   </div>
@@ -59,6 +56,19 @@
 <!-- Section: Produtos em destaque -->
 <section class="py-5">
   <div class="container px-4 px-lg-5 mt-5">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container mb-3">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
       {% for produto in produtos %}
       <div class="col mb-5">
@@ -72,7 +82,36 @@
           </div>
           <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
             <div class="text-center">
-              <a class="btn btn-outline-dark mt-auto" href="#">Comprar</a>
+              {% set pid = produto.id|string %}
+              {% if pid in session.get('carrinho', {}) %}
+                <div class="d-flex justify-content-center align-items-center gap-2 mb-2">
+                  <form method="POST" action="{{ url_for('carrinho.remover') }}">
+                    <input type="hidden" name="produto_id" value="{{ pid }}">
+                    <button class="btn btn-warning btn-sm">-</button>
+                  </form>
+
+                  <span class="fw-bold">{{ session['carrinho'][pid] }}</span>
+
+                  <form method="POST" action="{{ url_for('carrinho.adicionar') }}">
+                    <input type="hidden" name="produto_id" value="{{ pid }}">
+                    <button class="btn btn-success btn-sm">+</button>
+                  </form>
+
+                  <form method="POST" action="{{ url_for('carrinho.cancelar') }}">
+                    <input type="hidden" name="produto_id" value="{{ pid }}">
+                    <button class="btn btn-danger btn-sm">Cancelar</button>
+                  </form>
+                </div>
+
+                <div class="text-center mt-3">
+                  <a href="{{ url_for('carrinho.finalizar') }}" class="btn btn-primary btn-sm">Finalizar Compra</a>
+                </div>
+              {% else %}
+                <form method="POST" action="{{ url_for('carrinho.adicionar') }}">
+                  <input type="hidden" name="produto_id" value="{{ pid }}">
+                  <button class="btn btn-outline-dark mt-auto">Comprar</button>
+                </form>
+              {% endif %}
             </div>
           </div>
         </div>
