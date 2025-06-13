@@ -12,9 +12,6 @@
 <!-- Navbar com botão de menu lateral -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container px-4 px-lg-5">
-    <button class="btn btn-outline-secondary me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu">
-      ☰
-    </button>
     <a class="navbar-brand fw-bold" href="/">Marketplace</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
       <span class="navbar-toggler-icon"></span>
@@ -23,9 +20,7 @@
     <div class="collapse navbar-collapse" id="navbarContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link active" href="/">Início</a></li>
-        <li class="nav-item"><a class="nav-link" href="/produtos">Produtos</a></li>
         {% if current_user.is_authenticated %}
-          <li class="nav-item"><a class="nav-link" href="#">Carrinho</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ url_for('login.logout') }}">Logout</a></li>
         {% else %}
           <li class="nav-item"><a class="nav-link" href="/register">Login</a></li>
@@ -34,24 +29,6 @@
     </div>
   </div>
 </nav>
-
-<!-- Sidebar lateral com Bootstrap 5 (Offcanvas) -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="sidebarMenuLabel">Menu</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-  </div>
-  <div class="offcanvas-body">
-    <ul class="nav flex-column">
-      <li class="nav-item"><a class="nav-link" href="/">🏠 Início</a></li>
-      <li class="nav-item"><a class="nav-link" href="/produtos">🛍 Produtos</a></li>
-      {% if current_user.is_authenticated %}
-        <li class="nav-item"><a class="nav-link" href="#">🛒 Carrinho</a></li>
-      {% endif %}
-      <li class="nav-item"><a class="nav-link" href="#">👤 Login</a></li>
-    </ul>
-  </div>
-</div>
 
 <!-- Section: Produtos em destaque -->
 <section class="py-5">
@@ -104,7 +81,12 @@
                 </div>
 
                 <div class="text-center mt-3">
+                  {% if current_user.is_authenticated %}
                   <a href="{{ url_for('carrinho.finalizar') }}" class="btn btn-primary btn-sm">Finalizar Compra</a>
+                  {% endif %}
+                  {% if not current_user.is_authenticated %}
+                  <a href="{{ url_for('register.register') }}" class="btn btn-primary btn-sm">Para efetuar a compra, registre-se!</a>
+                  {% endif %}
                 </div>
               {% else %}
                 <form method="POST" action="{{ url_for('carrinho.adicionar') }}">
